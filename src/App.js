@@ -1,23 +1,20 @@
-import logo from './logo.svg';
 import './App.css';
+import { Input } from "./components/Input"
+import { Button } from "./components/Button"
+import Logo from "./images/vizLogo.png";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='flex items-center justify-center h-screen w-screen bg-purple-600'>
+      
+      <img src={Logo} className="w-20 h-20"/>
+      
+      <div className="grid w-full max-w-sm items-center gap-1.5">
+        <Input placeholder="Enter website" />
+      </div>
+
+      <Button variant="outline"><b>Start</b></Button>
+      
     </div>
   );
 }
