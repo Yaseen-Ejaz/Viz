@@ -82,7 +82,7 @@
 @layer base{
   @font-face {
     font-family: "Geist Sans";
-    src: url("./fonts/Geist-Regular.otf");
+    src: url("./assets/fonts/Geist-Regular.otf");
     font-weight: normal;
     font-display: swap;
   }
