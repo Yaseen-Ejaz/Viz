@@ -2,71 +2,108 @@ import '../App.css';
 import { useEffect, useState } from "react";
 import { Input } from "../components/Input";
 import { Button } from "../components/Button";
+import { Progress } from "../components/Progress";
 import Logo from "../assets/images/vizLogo.png";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from 'react-redux';
+import { setData } from '../store'; // Import the action
 
 function Main() {
   const [website, setWebsite] = useState("");
   const [buttonClick, setButtonClick] = useState(false);
+  const [isValid, setIsValid] = useState(true);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [progressValue, setProgressValue] = useState(0);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  // Function to handle input changes
   const handleInputChange = (e) => {
     setWebsite(e.target.value);
+    setIsValid(e.target.value.endsWith('.com'));
+    setErrorMessage("");
   };
 
-  // Function to handle button click
   const handleButtonClick = () => {
-    if (website) {
+    if (website && website.endsWith('.com')) {
       setButtonClick(true);
+      setLoading(true);
+      setProgressValue(20);
+    } else {
+      setIsValid(false);
+      setErrorMessage("Please enter a valid website ending in .com");
     }
   };
-
+  
   useEffect(() => {
-    // Making the fetch call in an async function
-    const fetchData = async () => {
-      try {
-        const response = await fetch('http://localhost:5000/test',{
+    if (buttonClick && isValid) {
+      const fetchData = async () => {
+        try {
+          setProgressValue(40);
+  
+          const response = await fetch('http://localhost:5000/main', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+              'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                "url": website
+              "url": website
             })
-        });
-        if (!response.ok) {
-          const text = await response.text();
-          throw new Error(`Server error: ${text}`);
+          });
+  
+          setProgressValue(60);
+  
+          // If response is an error (status 400)
+          if (!response.ok || response.status === 400) {
+            const errorData = await response.json();
+            setErrorMessage(errorData.message); // Display the error message returned from the server
+            setLoading(false);
+            setProgressValue(0);
+            return; // Exit the function on error
+          }
+  
+          const data = await response.json();
+          console.log(data.message);
+  
+          setProgressValue(100);
+          dispatch(setData(data.message)); // Store data in Redux
+
+          setTimeout(() => {
+            setLoading(false);
+            navigate("/questions"); // Navigate to the Questions page
+          }, 500);
+  
+        } catch (error) {
+          console.error("Error fetching data:", error);
+          setLoading(false);
+          setProgressValue(0);
         }
-        const data = await response.json();
-        console.log(data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    fetchData(); // Call the async function to fetch data
-  }, [buttonClick]);
+      };
+      fetchData();
+    }
+  }, [buttonClick, isValid, website, navigate]);
+  
 
   return (
     <div className='flex flex-col items-center justify-center h-screen w-screen bg-purple-600'>
-      
       <img src={Logo} className="w-20 h-20" alt="Logo" />
-
-      <div className='flex items-center justify-center'>
-
-        <div className="grid w-full max-w-sm items-center gap-2 mr-4">
-          <Input 
-            value={website} 
-            onChange={handleInputChange} 
-            placeholder="Enter website" 
-          />
+      {!loading ? (
+        <div className='flex items-center justify-center opacity-100 transition-opacity duration-500'>
+          <div className="grid w-full max-w-sm items-center gap-2 mr-4">
+            <Input
+              value={website}
+              onChange={handleInputChange}
+              placeholder="Enter website"
+            />
+          </div>
+          <Button variant="outline" onClick={handleButtonClick}>
+            <b>Start</b>
+          </Button>
         </div>
-
-        <Button variant="outline" onClick={handleButtonClick}>
-          <b>Start</b>
-        </Button>
-        
-      </div>
-
+      ) : (
+        <Progress value={progressValue} className="w-full max-w-sm mt-4" />
+      )}
+      {errorMessage && (<div className="text-red-600 text-sm">{errorMessage}</div>)}
     </div>
   );
 }
