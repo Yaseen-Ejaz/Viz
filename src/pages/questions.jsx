@@ -47,15 +47,18 @@ function Questions() {
     <div className="flex flex-col items-center justify-center h-screen w-screen bg-purple-600">
       {/* Fade-out transition when transitioning to the next question */}
       <div className={`transition-opacity duration-500 ease-out ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
-        {/* Display current question */}
-        <Label className="text-white text-lg mb-5 text-center">{questions[currentQuestionIndex]?.question}</Label>
+        
+        {/* Display current question in a label, without any box-like styles */}
+        <div className="mb-5 text-center">
+          <Label className="text-white text-lg">{questions[currentQuestionIndex]?.question}</Label>
+        </div>
 
         <div className="flex flex-col items-center justify-center w-full space-y-4 mt-8">
           {/* Options centered vertically and horizontally */}
           <RadioGroup className="flex flex-col items-center justify-center space-y-4">
             {questions[currentQuestionIndex]?.options.map((option, index) => {
-              // Removing the first two characters (A, B, C, D)
-              const optionText = option.substring(3);
+              // Removing the first two characters (A, B, C, D) and the period
+              const optionText = option.substring(2).trim();  // This will remove the letter and the period
 
               return (
                 <div
@@ -65,7 +68,7 @@ function Questions() {
                     bg-white text-black hover:scale-105 
                     ${isTransitioning ? 'scale-108' : 'scale-100'}`}
                 >
-                  <Label>{optionText}</Label> {/* Display the option without the first 2 characters */}
+                  <Label className="text-center">{optionText}</Label> {/* Display the option without the first 2 characters */}
                 </div>
               );
             })}

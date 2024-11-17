@@ -20,18 +20,27 @@ function Main() {
 
   const handleInputChange = (e) => {
     setWebsite(e.target.value);
-    setIsValid(e.target.value.endsWith('.com'));
+    
+    // Regular expression to match valid domain endings
+    const regex = /\.(com|co|co.uk|org|edu|net|app|gov)$/i;
+    
+    // Check if the website ends with one of the valid extensions
+    setIsValid(regex.test(e.target.value));
+    
     setErrorMessage("");
   };
-
+  
   const handleButtonClick = () => {
-    if (website && website.endsWith('.com')) {
+    // Regular expression to check for multiple valid domain endings
+    const regex = /\.(com|co|co.uk|org|edu|net|app|gov)$/i;
+    
+    if (website && regex.test(website)) {
       setButtonClick(true);
       setLoading(true);
       setProgressValue(20);
     } else {
       setIsValid(false);
-      setErrorMessage("Please enter a valid website ending in .com");
+      setErrorMessage("Please enter a valid website with a supported extension.");
     }
   };
   
@@ -39,7 +48,7 @@ function Main() {
     if (buttonClick && isValid) {
       const fetchData = async () => {
         try {
-          setProgressValue(40);
+          setProgressValue(20);
   
           const response = await fetch('http://localhost:5000/main', {
             method: 'POST',
@@ -50,8 +59,8 @@ function Main() {
               "url": website
             })
           });
-  
-          setProgressValue(60);
+          setProgressValue(50);
+
   
           // If response is an error (status 400)
           if (!response.ok || response.status === 400) {

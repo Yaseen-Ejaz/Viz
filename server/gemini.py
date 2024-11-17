@@ -1,6 +1,8 @@
 import google.generativeai as genai
+from dotenv import load_dotenv
+import os
 
-genai.configure(api_key="") #Put your google API key here
+genai.configure(api_key=os.environ["GEMINI_API_KEY"])
 
 def getQnA(website):
 
