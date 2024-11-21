@@ -10,6 +10,8 @@ function Questions() {
   const [isTransitioning, setIsTransitioning] = useState(false); // For managing transition state
   const data = useSelector((state) => state.data); // Fetching data from Redux store
   const navigate = useNavigate();
+  const queryParameters = new URLSearchParams(window.location.search)
+  const website = queryParameters.get("website")
 
   // Step 1: Parse the data string into questions and options
   const parseData = (dataString) => {
@@ -37,14 +39,14 @@ function Questions() {
         setCurrentQuestionIndex(currentQuestionIndex + 1);
       } else {
         // If all questions are answered, navigate to the next page
-        navigate("/nextPage"); // Change '/nextPage' to the actual route
+        window.location.href = "https://www."+website;
       }
       setIsTransitioning(false); // Reset the transition state
     }, 500); // Match this with the duration of the fade-out effect (in ms)
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen w-screen bg-purple-600">
+    <div className="flex flex-col items-center justify-center h-screen w-screen bg-purple-700">
       {/* Fade-out transition when transitioning to the next question */}
       <div className={`transition-opacity duration-500 ease-out ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
         

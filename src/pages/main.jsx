@@ -79,7 +79,7 @@ function Main() {
 
           setTimeout(() => {
             setLoading(false);
-            navigate("/questions"); // Navigate to the Questions page
+            navigate("/questions?website=" + website, { replace: true });  // Navigate to the Questions page
           }, 500);
   
         } catch (error) {
@@ -94,7 +94,7 @@ function Main() {
   
 
   return (
-    <div className='flex flex-col items-center justify-center h-screen w-screen bg-purple-600'>
+    <div className='flex flex-col items-center justify-center h-screen w-screen bg-purple-700'>
       <img src={Logo} className="w-20 h-20" alt="Logo" />
       {!loading ? (
         <div className='flex items-center justify-center opacity-100 transition-opacity duration-500'>
