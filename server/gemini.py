@@ -2,7 +2,7 @@ import google.generativeai as genai
 from dotenv import load_dotenv
 import os
 
-genai.configure(api_key=os.environ.get('GENAI_API_KEY'))
+genai.configure(api_key=os.environ.get('GEMINI_API_KEY'))
 
 def getQnA(website):
 
@@ -27,7 +27,7 @@ def getQnA(website):
         The questions should be based on classifying and helping to understand the user.
         The output should not have any extra text. Only the questions and options.
         The questions should not have .com, only the company name. The questions should be friendly and interactive.
-        Do not any extra spacing.
+        Do not any extra spacing. Ask a question in the end as how often do you use the product?
         Each question should be spaced by one line. The answers should be short. If the input is empty, or not a valid website, return Not Found.""",
         "input: apple.com",
         "output: Which product category are you interested in?\nA. Mac\nB. iPad\nC. iPhone\nD. Watch",

@@ -11,6 +11,7 @@ const dataSlice = createSlice({
   }
 });
 
+
 // Export the action created by the slice
 export const { setData } = dataSlice.actions;
 
