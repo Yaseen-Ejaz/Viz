@@ -14,10 +14,10 @@ def test():
     'dynamodb',
     aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
     aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY'),
-    region_name='ca-central-1'
+    region_name=os.environ.get('AWS_SECRET_ACCESS_KEY')
     )
 
-    table = dynamodb.Table('Questions')
+    table = dynamodb.Table(os.environ.get('DYNAMODB_TABLE'))
 
     try:
         response = table.put_item(

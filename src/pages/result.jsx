@@ -43,26 +43,28 @@ function Result() {
 
     return (
         <div className="flex flex-col items-center justify-center h-screen w-screen bg-purple-700">
-            <h1 className={`text-4xl font-bold mb-4 text-white transition-opacity duration-1000 ${
+            <div className="flex flex-col items-center justify-center bg-white rounded-lg p-10 drop-shadow-lg">
+            <h1 className={`text-4xl font-bold mb-4 text-purple-700 transition-opacity duration-1000 ${
                     fadeInHeading ? 'opacity-100' : 'opacity-0'
                 }`}
             >
                 {heading}
             </h1>
 
-            <h2 className={`text-1xl text-white transition-opacity duration-1000 ${
+            <h2 className={`text-1xl text-purple-700 transition-opacity duration-1000 ${
                     fadeInDescription ? 'opacity-100' : 'opacity-0'
                 }`}
             >
                 {description}
             </h2>
 
-            <p className={`text-white mt-10 transition-opacity duration-1000 ${
+            <p className={`text-purple-700 mt-10 transition-opacity duration-1000 ${
                     fadeInWebsite ? 'opacity-100' : 'opacity-0'
                 }`}
             >
                 Go to <u><a href={`https://${website}`} target="_blank" rel="noopener noreferrer">{website}</a></u>
             </p>
+            </div>
         </div>
     );
 }
