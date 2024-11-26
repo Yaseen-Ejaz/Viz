@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from gemini import getQnA
 from classifier import classifier
+from dynamodb import addQuestions
 app = Flask(__name__)
 CORS(app)  # Enable CORS
 import os
@@ -10,25 +11,6 @@ from botocore.exceptions import ClientError
 
 @app.route('/main' , methods=['POST'])
 def test():
-    dynamodb = boto3.resource(
-    'dynamodb',
-    aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
-    aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY'),
-    region_name=os.environ.get('AWS_SECRET_ACCESS_KEY')
-    )
-
-    table = dynamodb.Table(os.environ.get('DYNAMODB_TABLE'))
-
-    try:
-        response = table.put_item(
-            Item={
-                'id': 3,  # Partition key
-                'sortId': 4,  # Sort key
-            }
-        )
-        print("PutItem succeeded:", response)
-    except ClientError as e:
-        print("Error occurred:", e.response['Error']['Message'])
     website = request.json.get('url')
     try:
         # Call the getQnA function and print the output for debugging
@@ -38,7 +20,8 @@ def test():
         # Ensure exact matching by using str() and stripping whitespace if necessary
         if str(QuestionAnswer).strip() == 'Not Found':
             return jsonify({'message': 'Error'}), 400
-
+        
+        addQuestions(website,QuestionAnswer)
         return jsonify({'message': QuestionAnswer}), 200
 
     except Exception as e:
