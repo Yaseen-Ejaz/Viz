@@ -9,14 +9,13 @@ import { setData } from '../store'; // Import the action
 function Questions() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState([]);
-  const [isTransitioning, setIsTransitioning] = useState(false); // For managing transition state
-  const data = useSelector((state) => state.data); // Fetching data from Redux store
+  const [isTransitioning, setIsTransitioning] = useState(false); //transitions
+  const data = useSelector((state) => state.data);  //redux data
   const queryParameters = new URLSearchParams(window.location.search);
   const website = queryParameters.get("website");
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // Step 1: Parse the data string into questions and options
   const parseData = (dataString) => {
     const questionsArr = dataString.split("\n\n").map((questionBlock) => {
       const [question, ...options] = questionBlock.split("\n");
@@ -25,10 +24,8 @@ function Questions() {
     return questionsArr;
   };
 
-  // Parsing the data string into questions and options
   const questions = parseData(data);
 
-  // Step 2: Handle option click and transition to next question
   const handleOptionClick = async (option) => {
     const updatedAnswers = [...answers, { 
       question: questions[currentQuestionIndex].question, 
@@ -36,10 +33,8 @@ function Questions() {
     }];
     setAnswers(updatedAnswers);
 
-    // Trigger the transition animation
     setIsTransitioning(true);
 
-    // After animation ends, move to the next question or send data if all questions are answered
     setTimeout(async () => {
       if (currentQuestionIndex < questions.length - 1) {
         setCurrentQuestionIndex(currentQuestionIndex + 1);
@@ -62,9 +57,7 @@ function Questions() {
             console.log('Response from Flask:', resultData.message);
             dispatch(setData(resultData.message));
 
-            // Navigate to the results page
             navigate('/result?website=' + website, { replace: true });
-            // Navigate to the results page
           } else {
             console.error('Failed to send data to Flask:', response.status);
           }
@@ -72,8 +65,8 @@ function Questions() {
           console.error('Error sending data to Flask:', error);
         }
       }
-      setIsTransitioning(false); // Reset the transition state
-    }, 500); // Match this with the duration of the fade-out effect (in ms)
+      setIsTransitioning(false);
+    }, 500); 
   };
 
 
