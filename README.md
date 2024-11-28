@@ -33,7 +33,7 @@ AWS CLI (configured for your account)
 
 ### Clone the Repository
 ```
-git clone https://github.com/your-username/viz-visitor-classification.git
+git clone https://github.com/Yaseen-Ejaz/viz-visitor-classification.git
 cd viz
 ```
 
