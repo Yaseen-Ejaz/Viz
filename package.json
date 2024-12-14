@@ -49,5 +49,10 @@
   },
   "devDependencies": {
     "tailwindcss": "^3.4.14"
-  }
+  },
+  "description": "Viz is an interactive visitor classification tool designed to group users based on their answers to a short survey. By leveraging advanced technologies like Google Gemini and AWS, Viz efficiently generates dynamic questions and stores user responses, providing insightful classification results.",
+  "main": "tailwind.config.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }

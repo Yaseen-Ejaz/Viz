@@ -1,9 +1,13 @@
 import google.generativeai as genai
 from dotenv import load_dotenv
 import os
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 from dynamodb import getQuestionAnswers
+app = Flask(__name__)
 
-genai.configure(api_key=os.environ.get('GEMINI_API_KEY'))
+app.config['GEMINI_API_KEY'] = os.environ.get('GEMINI_API_KEY')
+genai.configure(api_key=''+app.config['GEMINI_API_KEY'])
 
 def getQnA(website):
 
@@ -37,7 +41,7 @@ def getQnA(website):
         The questions should be based on classifying and helping to understand the user.
         The output should not have any extra text. Only the questions and options.
         The questions should not have .com, only the company name. The questions should be friendly and interactive.
-        Do not add any extra spacing. 
+        Do not add any extra spacing. Give the response only in string format. All questions should be unique
         Each question should be spaced by one line. The answers should be short. If the input is empty, or not a valid website, return Not Found.""",
         "input: apple.com",
         "output: Which product category are you interested in?\nA. Mac\nB. iPad\nC. iPhone\nD. Watch",
