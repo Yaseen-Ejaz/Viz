@@ -1,16 +1,12 @@
 import google.generativeai as genai
 from dotenv import load_dotenv
 import os
-from flask import Flask, request, jsonify
 from flask_cors import CORS
 from dynamodb import getQuestionAnswers
-app = Flask(__name__)
 
-app.config['GEMINI_API_KEY'] = os.environ.get('GEMINI_API_KEY')
-genai.configure(api_key=''+app.config['GEMINI_API_KEY'])
+genai.configure(api_key=os.environ.get('GEMINI_API_KEY'))
 
 def getQnA(website):
-
     randomQuestionAnswer = getQuestionAnswers(website)
     website_names = [item['website'] for item in randomQuestionAnswer]
     questions_and_answers = [
